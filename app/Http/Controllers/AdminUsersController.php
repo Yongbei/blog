@@ -146,6 +146,8 @@ class AdminUsersController extends Controller
             $user->photo()->delete();
         }
 
+        // $user->posts()->delete();  //已在post table 加上 Foreign key: user_id <-> users: id (in Create Post migration)，刪除 user 會連動一併刪除此user的posts
+
         $user->delete();
 
         Session::flash('deleted_user', 'The user has been deleted !');

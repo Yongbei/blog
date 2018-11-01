@@ -3,10 +3,6 @@
 
 @section('content')
 
-	@if (Session::has('deleted_user'))
-		<p class='bg-danger'>{{session('deleted_user')}}</p>
-	@endif
-
 	<h1>Create Post</h1>
 
 	{!! Form::open(['method'=>'POST', 'action'=>'AdminPostsController@store', 'files'=>true]) !!}
@@ -18,7 +14,7 @@
 
 		<div class="form-group">
 			{!! Form::label('category_id', 'Category:') !!}
-			{!! Form::select('category_id', [''=>'Choose Options'], null, ['class'=>'form-control']) !!}
+			{!! Form::select('category_id', [''=>'Choose Categories'] + $categories, null, ['class'=>'form-control']) !!}
 		</div>
 
 		<div class="form-group">
@@ -32,7 +28,7 @@
 		</div>
 
 		<div class="form-group">
-			{!! Form::submit('Create User', ['class'=>'btn btn-primary']) !!}
+			{!! Form::submit('Create Post', ['class'=>'btn btn-primary']) !!}
 		</div>
 
 	{!! Form::close() !!}
