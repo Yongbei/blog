@@ -11,6 +11,10 @@ class Photo extends Model
     protected $upload_dir = '/images/';
 
     public function getNameAttribute($name){
-    	return $this->upload_dir . $name;
+    	$path = (file_exists(public_path() . $this->upload_dir . $name)) ? $this->upload_dir . $name : "http://placehold.it/900x300";
+    	return $path;
+
+    	// return $this->upload_dir . $name;
+    	 
     }
 }

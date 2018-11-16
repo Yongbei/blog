@@ -22,3 +22,46 @@ $factory->define(App\User::class, function (Faker $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Post::class, function (Faker $faker) {
+    return [
+		'category_id' => $faker->numberBetween(1, 3),
+		'photo_id'    => 1,
+		'title'       => $faker->sentence(7, 11),
+		'body'        => $faker->paragraphs(rand(10, 15), true),
+		'slug'        => $faker->slug(),
+    ];
+});
+
+$factory->define(App\Role::class, function (Faker $faker) {
+    return [
+		'name' => $faker->unique()->randomElement(['administrator', 'author', 'subscriber']),
+    ];
+});
+
+$factory->define(App\Category::class, function (Faker $faker) {
+    return [
+		'name' => $faker->unique()->randomElement(['Laravel', 'PHP', 'Javascript']),
+    ];
+});
+
+$factory->define(App\Photo::class, function (Faker $faker) {
+    return [
+		'name' => 'placeholder.jpg',
+    ];
+});
+
+$factory->define(App\Comment::class, function (Faker $faker) {
+    return [
+		'is_active' => 1,
+		'body'=> $faker->paragraphs(1, true),
+    ];
+});
+
+$factory->define(App\CommentReply::class, function (Faker $faker) {
+    return [
+		'is_active' => 1,
+		'body'=> $faker->paragraphs(1, true),
+    ];
+});
+

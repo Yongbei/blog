@@ -2,6 +2,7 @@
 
 
 @section('content')
+	@include('includes.ckeditor')
 
 	<h1>Edit Post</h1>
 
@@ -29,7 +30,7 @@
 
 			<div class="form-group">
 				{!! Form::label('body', 'Description:') !!}
-				{!! Form::textarea('body', null, ['class'=>'form-control', 'rows'=>3]) !!}
+				{!! Form::textarea('body', null, ['id'=>'editor', 'class'=>'form-control', 'rows'=>3]) !!}
 			</div>
 
 			<div class="form-group">
@@ -46,9 +47,13 @@
 
 		@include('includes.form-error')
 	</div>
-
 	
 
-	
+@endsection
 
+
+@section('scripts')
+	<script>
+		CKEDITOR.replace('editor', options);
+	</script>
 @endsection

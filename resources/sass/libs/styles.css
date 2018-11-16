@@ -39,3 +39,8 @@
 #admin-page {
 	padding-top: 0px;
 }
+
+/**************** Post.blade.php  *********************/
+.replyForm {
+    display: none;
+}
