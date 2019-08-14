@@ -15,6 +15,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\User::class, function (Faker $faker) {
     return [
+        'role_id' => $faker->randomElement([1, 2, 3]),
+        'is_active' => $faker->randomElement([0, 1]),
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
@@ -25,11 +27,12 @@ $factory->define(App\User::class, function (Faker $faker) {
 
 $factory->define(App\Post::class, function (Faker $faker) {
     return [
-		'category_id' => $faker->numberBetween(1, 3),
-		'photo_id'    => 1,
-		'title'       => $faker->sentence(7, 11),
-		'body'        => $faker->paragraphs(rand(10, 15), true),
-		'slug'        => $faker->slug(),
+        'user_id'     => 1,
+        'category_id' => $faker->numberBetween(1, 3),
+        'photo_id'    => 1,
+        'title'       => $faker->sentence(7, 11),
+        'body'        => $faker->paragraphs(rand(10, 15), true),
+        'slug'        => $faker->slug(),
     ];
 });
 
@@ -51,17 +54,17 @@ $factory->define(App\Photo::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(App\Comment::class, function (Faker $faker) {
-    return [
-		'is_active' => 1,
-		'body'=> $faker->paragraphs(1, true),
-    ];
-});
+// $factory->define(App\Comment::class, function (Faker $faker) {
+//     return [
+// 		'is_active' => 1,
+// 		'body'=> $faker->paragraphs(1, true),
+//     ];
+// });
 
-$factory->define(App\CommentReply::class, function (Faker $faker) {
-    return [
-		'is_active' => 1,
-		'body'=> $faker->paragraphs(1, true),
-    ];
-});
+// $factory->define(App\CommentReply::class, function (Faker $faker) {
+//     return [
+// 		'is_active' => 1,
+// 		'body'=> $faker->paragraphs(1, true),
+//     ];
+// });
 

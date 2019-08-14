@@ -36,4 +36,10 @@ class HomeController extends Controller
         $categories = Category::all();
         return view('post', compact('post', 'comments', 'categories'));
     }
+
+    public function Category($id){
+        $posts = Category::findOrFail($id)->posts()->paginate(5);
+        $categories = Category::all();
+        return view('front.home', compact('posts', 'categories'));
+    }
 }

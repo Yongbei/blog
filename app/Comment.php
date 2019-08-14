@@ -24,4 +24,12 @@ class Comment extends Model
     public function commentReplies(){
         return $this->hasMany('App\CommentReply');
     }
+
+    public function approved($approve = true){
+        return $this->update(['is_active'=>$approve]);
+    }
+
+    public function unapproved(){
+       $this->approved(false);
+    }
 }

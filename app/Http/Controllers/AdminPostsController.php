@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\PostsCreateRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use App\Post;
-use App\Photo;
 use App\Category;
+use App\Events\PostCreated;
+use App\Http\Requests\PostsCreateRequest;
+use App\Mail\PostCreated as PostCreatedMail;
+use App\Photo;
+use App\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 
 class AdminPostsController extends Controller
 {
+    // authorization 181213  執行上有問題,會擋住所有使用者
+    // public function __construct(){
+    //     $this->middleware('can:update,post')->except(['index', 'edit']);
+    // }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +30,17 @@ class AdminPostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
+        $posts = auth()->user()->posts()->paginate(10);
+        // $posts = Post::where('user_id', auth()->id())->paginate(10);
+
+        // Telescope test 181213
+        // dump($posts);
+        // cache()->rememberForever('status', function(){
+        //     return ['lessions' => 1300, 'hours' => 500, 'series' => 100];
+        // });
+        // $status = cache()->get('status');
+        // dump($status);
+
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -43,7 +63,7 @@ class AdminPostsController extends Controller
      */
     public function store(PostsCreateRequest $request)
     {
-        $input = $request->all();
+        $attribute = $request->all();
 
         $user = Auth::user();
 
@@ -51,12 +71,21 @@ class AdminPostsController extends Controller
             $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
             $photo = Photo::create(['name'=>$name]);
-            $input['photo_id'] = $photo->id;
+            $attribute['photo_id'] = $photo->id;
         }
 
-        $user->posts()->create($input);
+        $post = $user->addPost($attribute);
 
-        Session::flash('post_msg', 'The post has been created !');
+        // 181214 mail寄送
+        // Mail::to($post->user->email)->send(
+        //     new PostCreatedMail($post)
+        // );
+
+        //=== Events & Listeners  181214 ===//
+        // event(new PostCreated($post));
+
+
+        flash('The post has been created !');
 
         return redirect('/admin/posts');
 
@@ -82,7 +111,26 @@ class AdminPostsController extends Controller
     public function edit($id)
     {
         $post = Post::findOrFail($id);
+
+
+        //======= Authorization =======// 181212
+
+        // if ($post->user_id !== auth()->id()) { abort(403); }
+
+        // abort_if($post->user_id !== auth()->id(), 403);
+        // abort_unless($post->user_id == auth()->id(), 403);
+        // abort_if(!auth()->user()->owns($post), 403);
+        // abort_unless(auth()->user()->owns($post), 403)
+
+        $this->authorize('update', $post);  //執行Policy驗證
+
+        // abort_if(\Gate::denies('update', $post), 403);
+        // abort_unless(\Gate::allows('update', $post), 403);
+
+        //======= ./ Authorization =======//
+
         $categories = Category::pluck('name', 'id')->all();
+
         return view('admin.posts.edit', compact('post', 'categories'));
     }
 
@@ -111,7 +159,7 @@ class AdminPostsController extends Controller
         // $post->update($input);
         Auth::user()->posts()->whereId($id)->first()->update($input);
 
-        Session::flash('post_msg', 'The post has been updated !');
+        flash('The post has been updated !');
 
         return redirect('/admin/posts');
     }
@@ -132,7 +180,7 @@ class AdminPostsController extends Controller
 
         $post->delete();
 
-        Session::flash('post_msg', 'The post has been deleted !');
+        flash('The post has been deleted !');
 
         return redirect('/admin/posts');
     }

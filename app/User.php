@@ -37,11 +37,27 @@ class User extends Authenticatable
     }
 
     public function posts(){
-        return $this->hasMany('App\Post');
+        return $this->hasMany(Post::class);
+        // return $this->hasMany('App\Post');
     }
 
     public function isAdmin(){
         //administrator
         return ($this->role->id == 1 && $this->is_active == 1) ? true : false;
     }
+
+    public function addPost($attribute){
+        return $this->posts()->create($attribute);
+    }
+
+
+    //===== 181217 tinker 測試 colleciton filter 用法  =====//
+    // public function isVerified(){
+    //     return (bool) $this->email_verified_at;
+    // }
+
+    // public function isNotVerified(){
+    //     return !$this->isVerified();
+    // }
+    // . ==============================//
 }

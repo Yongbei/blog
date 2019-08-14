@@ -9,6 +9,11 @@ use App\Comment;
 
 class AdminController extends Controller
 {
+
+    // public function __construct(){
+    //     $this->middleware('admin');
+    // }
+    
     public function index(){
     	$postCount = Post::count();
     	$categoryCount = Category::count();

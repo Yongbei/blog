@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\PhotoCreateRequest;
 use App\Photo;
+use Illuminate\Http\Request;
 
 class AdminMediaController extends Controller
 {

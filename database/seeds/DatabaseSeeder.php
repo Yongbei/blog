@@ -17,14 +17,14 @@ class DatabaseSeeder extends Seeder
     	DB::table('roles')->truncate();
     	DB::table('categories')->truncate();
     	DB::table('photos')->truncate();
-    	// DB::table('comments')->truncate();
-    	// DB::table('comment_replies')->truncate();
+    	DB::table('comments')->truncate();
+    	DB::table('comment_replies')->truncate();
 
     	factory(App\User::class, 10)->create()->each(function($user){
     		$user->posts()->save(factory(App\Post::class)->make());
     	});
 
-    	// factory(App\Post::class, 10)->create();
+    	factory(App\Post::class, 10)->create();
 
     	factory(App\Role::class, 3)->create();
 
@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
 
     	// factory(App\CommentReply::class, 10)->create();
 
+        // 呼叫 UsersTableSeeder
         // $this->call(UsersTableSeeder::class);
     }
 }

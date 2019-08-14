@@ -3,9 +3,7 @@
 
 @section('content')
 
-	@if (Session::has('category_msg'))
-		<p class='bg-danger'>{{session('category_msg')}}</p>
-	@endif
+	@include('includes.msg')
 
 	<h1>Categories</h1>
 

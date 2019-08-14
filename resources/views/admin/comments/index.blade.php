@@ -30,19 +30,12 @@
 					<td>
 						@if($comment->is_active)
 
-					        {!! Form::open(['method'=>'PATCH', 'action'=>['PostCommentsController@update', $comment->id]]) !!}
-
-								{!! Form::hidden('is_active', 0) !!}
-
+							{!! Form::open(['method'=>'DELETE', 'action'=>['ApprovedCommentController@destroy', $comment->id]]) !!}				    
 								{!! Form::submit('Unapprove', ['class'=>'btn btn-info']) !!}
 
 					        {!! Form::close() !!}							
 						@else
-
-							{!! Form::open(['method'=>'PATCH', 'action'=>['PostCommentsController@update', $comment->id]]) !!}
-
-								{!! Form::hidden('is_active', 1) !!}
-
+							{!! Form::open(['method'=>'POST', 'action'=>['ApprovedCommentController@store', $comment->id]]) !!}							
 								{!! Form::submit('Approve', ['class'=>'btn btn-success']) !!}
 
 					        {!! Form::close() !!}

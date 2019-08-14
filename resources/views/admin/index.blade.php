@@ -2,7 +2,9 @@
 
 @section('content')
 	<h1>Admin</h1>
-	<canvas id="myChart"></canvas>
+	<div class="col-lg-11">
+		<canvas id="myChart"></canvas>
+	</div>
 @endsection
 
 @section('scripts')

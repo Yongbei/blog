@@ -44,7 +44,7 @@ class PostCommentsController extends Controller
         $input['user_id'] = $user->id;
         Comment::create($input);
 
-        $request->session()->flash('comment_msg', 'The comment has been submitted!');
+        flash('The comment has been submitted!');
 
         return redirect()->back();
     }

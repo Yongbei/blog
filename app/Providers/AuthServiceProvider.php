@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Contracts\Auth\Access\Gate as AuthGate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Post' => 'App\Policies\PostPolicy',  // Authorization  181212
     ];
 
     /**
@@ -21,10 +22,16 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(AuthGate $gate)
     {
         $this->registerPolicies();
 
-        //
+        // authorization 181212
+        // 如果不是true, 會繼續 Policy 驗證
+        // $gate->before(function($user){
+        //     if ($user->isAdmin()){
+        //         return true;
+        //     }
+        // });
     }
 }

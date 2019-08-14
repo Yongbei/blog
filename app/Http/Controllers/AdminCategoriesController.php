@@ -38,8 +38,18 @@ class AdminCategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create($request->all());
-        Session::flash('category_msg', 'The Category has been created !');
+        //create and validate 方法1
+        // Category::create($request->all());
+
+        //create and validate 方法2
+        // $attributes = request()->validate([
+        //     'name' => ['required', 'min:3', 'max:10']
+        // ]);
+        Category::create($this->validateCategory());
+
+        flash('The Category has been created !');
+        // Session::flash('msg', 'The Category has been created !');
+
         return redirect('/admin/categories');
     }
 
@@ -60,9 +70,8 @@ class AdminCategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $category = Category::findOrFail($id);
         return view('admin.categories.edit', compact('category'));
     }
 
@@ -73,10 +82,14 @@ class AdminCategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(Category $category, CategoryRequest $request)
     {
-        Category::findOrFail($id)->update($request->all());
-        Session::flash('category_msg', 'The Category has been updated !');
+        // $category->update($request->all());
+        $category->update($this->validateCategory());
+
+        flash('The Category has been updated !');
+        // Session::flash('msg', 'The Category has been updated !');
+
         return redirect('/admin/categories');
     }
 
@@ -86,10 +99,21 @@ class AdminCategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        Category::findOrFail($id)->delete();
-        Session::flash('category_msg', 'The Category has been deleted !');
+        $category->delete();
+
+        flash('The Category has been deleted !');
+        // Session::flash('msg', 'The Category has been deleted !');
+
         return redirect('/admin/categories');
+    }
+
+
+    // 181213
+    public function validateCategory(){
+        return request()->validate([
+            'name' => ['required', 'min:3', 'max:10']
+        ]);
     }
 }

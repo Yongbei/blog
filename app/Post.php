@@ -2,9 +2,12 @@
 
 namespace App;
 
+use App\Events\PostCreated;
+use App\Mail\PostCreated as PostCreatedMail;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class Post extends Model
 {
@@ -12,6 +15,11 @@ class Post extends Model
     use SluggableScopeHelpers;
 
     protected $fillable = ['user_id', 'category_id', 'photo_id', 'title', 'body'];
+
+    // 190610 marked by Yong
+    // protected $dispatchesEvents = [
+    //     'created' => PostCreated::class,
+    // ];
 
     /**
      * Return the sluggable configuration array for this model.
@@ -28,6 +36,16 @@ class Post extends Model
             
         ];
     }
+
+    //Model Hooks and Seesaws   181213 Yong
+    // protected static function boot(){
+    //     parent::boot();
+    //     static::created(function($post){
+    //         Mail::to($post->user->email)->send(
+    //             new PostCreatedMail($post)
+    //         );
+    //     });
+    // }
 	
 
     public function user(){
